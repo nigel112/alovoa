@@ -29,7 +29,11 @@
 #
 set -euo pipefail
 
+# Run from the repo root. If the script was downloaded on its own (no repo
+# layout next to it), fall back to the directory it was launched from.
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+[ -f "$REPO_ROOT/pom.xml" ] || REPO_ROOT="$(pwd)"
+[ -f "$REPO_ROOT/pom.xml" ] || die "no pom.xml found - run this from the alovoa repository root"
 cd "$REPO_ROOT"
 
 DB_NAME="alovoa"
