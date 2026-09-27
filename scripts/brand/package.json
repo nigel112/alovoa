@@ -1,0 +1,15 @@
+{
+  "name": "baelink-brand-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Generates every BaeLink brand asset (icons, favicon, PWA splash, Open Graph card, README screenshots) from the vector masters in lib/brand.mjs",
+  "type": "module",
+  "scripts": {
+    "build": "node build-assets.mjs",
+    "build:cache": "node build-assets.mjs --skip-screens"
+  },
+  "dependencies": {
+    "opentype.js": "^1.3.4",
+    "sharp": "^0.34.5"
+  }
+}

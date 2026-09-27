@@ -9,7 +9,7 @@ assignees: ''
 
 **Check if you're in the correct repository**
 
-This repository only covers bugs in the backend and web UI of alovoa.com only. Go to [alovoa-expo](https://github.com/Alovoa/alovoa-expo) for reporting bugs on app.alovoa.com.
+This repository only covers bugs in the backend and web UI of this server. Go to [alovoa-expo](https://github.com/Alovoa/alovoa-expo) for reporting bugs in the mobile app.
 
 **Describe the bug**
 

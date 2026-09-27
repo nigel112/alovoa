@@ -12,7 +12,7 @@
     <groupId>com.alovoa</groupId>
     <artifactId>alovoa</artifactId>
     <version>1.1.0</version>
-    <name>alovoa</name>
+    <name>baelink</name>
     <description>Alovoa</description>
 
     <properties>

@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Check if you're in the correct repository**
-This repository only covers feature requests in the backend and web UI of alovoa.com only. Go to [alovoa-expo](https://github.com/Alovoa/alovoa-expo) for requesting feature requests on app.alovoa.com.
+This repository only covers feature requests in the backend and web UI of this server. Go to [alovoa-expo](https://github.com/Alovoa/alovoa-expo) for requesting features in the mobile app.
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]

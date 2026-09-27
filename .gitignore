@@ -44,3 +44,6 @@ alovoa.txt
 application-dev.properties
 application-prod.properties
 
+
+### Node (brand asset generator in scripts/brand) ###
+node_modules/

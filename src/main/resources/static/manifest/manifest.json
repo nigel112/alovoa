@@ -1,19 +1,19 @@
 {
-  "short_name": "Alovoa",
-  "name": "Alovoa",
+  "short_name": "BaeLink",
+  "name": "BaeLink",
   "icons": [
     {
-      "src": "/img/alovoa_56.png",
+      "src": "/img/baelink_56.png",
       "type": "image/png",
       "sizes": "56x56"
     },
     {
-      "src": "/img/alovoa_112.png",
+      "src": "/img/baelink_112.png",
       "type": "image/png",
       "sizes": "112x112"
     },
     {
-      "src": "/img/alovoa_128.png",
+      "src": "/img/baelink_128.png",
       "type": "image/png",
       "sizes": "128x128"
     },
@@ -28,13 +28,13 @@
       "sizes": "512x512"
     }
   ],
-  "id": "Alovoa",
+  "id": "BaeLink",
   "start_url": "/?pwa",
-  "background_color": "#ec407a",
+  "background_color": "#FF3D68",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#ec407a",
-  "description" : "Meet new, exciting people! 100% free and open-source.",
-  "orientation" : "portrait",
-  "lang" : "en-US"
+  "theme_color": "#FF3D68",
+  "description": "Meet new, exciting people! 100% free and open-source.",
+  "orientation": "portrait",
+  "lang": "en-US"
 }

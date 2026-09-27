@@ -1,0 +1,6 @@
+${AnsiColor.BRIGHT_RED}  *** ${AnsiColor.BRIGHT_MAGENTA} ***  ${AnsiColor.DEFAULT}   ${AnsiStyle.BOLD}${AnsiColor.BRIGHT_WHITE}BaeLink${AnsiColor.DEFAULT}${AnsiStyle.NORMAL}
+${AnsiColor.BRIGHT_RED} *****${AnsiColor.BRIGHT_MAGENTA}***** ${AnsiColor.DEFAULT}   ${AnsiColor.WHITE}Meet new, exciting people!${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_RED}  ****${AnsiColor.BRIGHT_MAGENTA}****  ${AnsiColor.DEFAULT}   ${AnsiColor.BRIGHT_BLACK}Build${application.formatted-version}${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_RED}   ***${AnsiColor.BRIGHT_MAGENTA}***   ${AnsiColor.DEFAULT}   ${AnsiColor.BRIGHT_BLACK}Spring Boot ${spring-boot.formatted-version}${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_RED}    **${AnsiColor.BRIGHT_MAGENTA}**    ${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_RED}     *${AnsiColor.BRIGHT_MAGENTA}*     ${AnsiColor.DEFAULT}

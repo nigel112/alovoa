@@ -8,7 +8,7 @@
  */
 
 
-const cacheName = '62';
+const cacheName = '63';
 const staticAssets = [
 
 	'/favicon.ico',
@@ -115,7 +115,7 @@ self.addEventListener('push', function(event) {
 
 	event.waitUntil(self.registration.showNotification(title, {
 		body: message,
-		tag: 'Alovoa',
+		tag: 'BaeLink',
 		icon: icon,
 		badge: icon
 	}));
