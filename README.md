@@ -115,6 +115,19 @@ the iOS PWA splash and the three screenshots above. Edit
 [`scripts/brand/lib/brand.mjs`](scripts/brand/lib/brand.mjs) to restyle the
 brand (colours, mark, wordmark, tagline) and everything follows.
 
+To look at the rebranded landing page without installing a JDK, database or
+mail server, render it as a static page:
+
+```sh
+node scripts/preview-static.mjs .preview
+cd .preview && python3 -m http.server 8080
+```
+
+It resolves the templates' message keys from the app's i18n file, inlines the
+header and footer fragments and links the real CSS and images, so the page you
+get at <http://localhost:8080> is the genuine landing page - just without the
+server behind it.
+
 ### Documentation:
 - Please read the [DOCUMENTATION.md](/DOCUMENTATION.md)
 

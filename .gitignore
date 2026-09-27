@@ -47,3 +47,6 @@ application-prod.properties
 
 ### Node (brand asset generator in scripts/brand) ###
 node_modules/
+
+# static landing-page preview (scripts/preview-static.mjs)
+.preview/
