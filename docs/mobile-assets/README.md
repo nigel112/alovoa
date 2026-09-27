@@ -6,11 +6,43 @@ share one identity.
 
 **An APK cannot be built from this repository.** This repo is the Spring Boot
 back end; the app is the separate Expo project
-[Alovoa/alovoa-expo](https://github.com/Alovoa/alovoa-expo). Building Android
-binaries also needs a JDK 17, the Android SDK and Gradle, none of which exist in
-this sandbox (and `dl.google.com`, `repo1.maven.org` and
-`services.gradle.org` are unreachable from it). Use Expo's **EAS Build**, which
-compiles in the cloud - no local Android toolchain required.
+[Alovoa/alovoa-expo](https://github.com/Alovoa/alovoa-expo). Build the binary on
+**GitHub Actions** (or Expo's EAS) instead - both compile in the cloud, so no
+JDK/Android SDK is needed. This sandbox cannot do either step locally:
+`dl.google.com`, `repo1.maven.org` and `services.gradle.org` are unreachable
+from it.
+
+## 0. Apply the rebrand in one command
+
+`scripts/mobile-rebrand.mjs` does sections 1-2 below for you, on a clone of the
+app:
+
+```sh
+git clone https://github.com/Alovoa/alovoa-expo.git baelink-expo
+cd baelink-expo
+node /path/to/alovoa/scripts/mobile-rebrand.mjs .
+#   --name BaeLink  --slug baelink-expo  --package com.baelink.expo
+#   --domain http://localhost:8080  --repo you/baelink-expo
+
+git checkout -b rebrand/baelink
+git add -A && git commit -m "Rebrand the app to BaeLink"
+git push -u origin rebrand/baelink
+```
+
+It copies the `expo/` artwork, rewrites the two icon SVGs, patches
+`app.config.js`, `URL.tsx`, `Login.tsx`, `YourProfile.tsx`, `package.json`, the
+store listing, the README and the issue templates, recolours the illustrations,
+and drops in `build-android.yml`. Re-runnable and idempotent.
+
+Prefer a ready-made commit? `baelink-rebrand.bundle` in this folder is the same
+change as a git bundle:
+
+```sh
+git clone https://github.com/Alovoa/alovoa-expo.git baelink-expo
+cd baelink-expo
+git fetch /path/to/alovoa/docs/mobile-assets/baelink-rebrand.bundle rebrand/baelink
+git checkout -b rebrand/baelink FETCH_HEAD
+```
 
 ## 1. Copy the artwork
 
@@ -76,7 +108,41 @@ Also update:
 > Play Console and App Store Connect. Decide the identifiers before the first
 > release build.
 
-## 3. Build the APK (cloud)
+## 3. Build the APK on GitHub Actions (recommended)
+
+`build-android.yml` in this folder builds on GitHub's own runners - free minutes,
+no Expo account, no local toolchain. GitHub's `ubuntu-latest` image already has
+Java 17 and the Android SDK, so the workflow only has to install the npm package
+graph and drive Gradle, following the same `yarn` path as upstream's `ci.yml`:
+
+1. `yarn install --frozen-lockfile` (the app ships a `yarn.lock`, not a
+   `package-lock.json`, so `npm ci` will not work)
+2. `yarn doctor` - expo-doctor sanity check, allowed to fail
+3. `yarn f-droid` - `expo prebuild --platform android --clean`, pins a patchable
+   `expo-location`, applies the `scripts/patches` patches, drops signing
+4. `./gradlew assembleDebug` - **installable**, signed with the standard debug
+   key; `assembleRelease` also runs and produces an unsigned APK for
+   Play/F-Droid to sign
+
+```sh
+cp /path/to/alovoa/docs/mobile-assets/build-android.yml \
+   alovoa-expo/.github/workflows/build-android.yml
+cd alovoa-expo && git add -A && git commit -m "Build Android APK on CI" && git push
+```
+
+Then open **Actions -> Build Android APK -> Run workflow** and download the
+`baelink-apk` artifact when it finishes (plan on 15-30 minutes; the first run
+also warms Gradle's cache). Enable developer options + "install unknown apps" on
+the phone, copy the debug APK over and tap it.
+
+Upstream already ships `.github/workflows/ci.yml`, which runs the same
+`yarn install` / `yarn f-droid` / `assembleRelease` sequence on pushes to
+`master` and on pull requests - so pushing the rebrand branch and opening a PR
+also produces an APK. The added workflow differs in three ways: it has a manual
+`Run workflow` trigger, it builds branch names other than `master`, and it also
+emits the signed debug APK that a phone will actually install.
+
+## 3b. Build the APK with EAS (alternative)
 
 ```sh
 npm i -g eas-cli
