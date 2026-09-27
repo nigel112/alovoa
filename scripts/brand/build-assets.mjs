@@ -17,6 +17,7 @@
  *   src/main/resources/static/img/share.png                Open Graph card
  *   src/main/resources/static/img/ios-pwa.webp             iOS PWA splash
  *   docs/screenshots/{landing,discover,chat}.png           README screenshots
+ *   docs/mobile-assets/**                                  icons + splash for the Expo app
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -24,11 +25,12 @@ import sharp from 'sharp';
 import {
   BRAND, IMG, ROOT, STATIC, iconSvg, lockupSvg, markSvg,
 } from './lib/brand.mjs';
-import { shareCardSvg, splashSvg, SHARE, SPLASH } from './lib/cards.mjs';
+import { mobileSplashSvg, shareCardSvg, splashSvg, SHARE, SPLASH } from './lib/cards.mjs';
 import { SCREENS, SCREEN } from './lib/screens.mjs';
-import { setPhotoSource } from './lib/draw.mjs';
+import { setPhotoSource, solidSvg } from './lib/draw.mjs';
 
 const DOCS = path.join(ROOT, 'docs', 'screenshots');
+const MOBILE = path.join(ROOT, 'docs', 'mobile-assets');
 const skipScreens = process.argv.includes('--skip-screens');
 
 function write(file, contents) {
@@ -135,6 +137,64 @@ async function main() {
       await svgTo(svg, path.join(DOCS, screen.file), { width: SCREEN.w, height: SCREEN.h, supersample: 2 });
     }
   }
+
+  // --- mobile app assets (Expo / Android / iOS) ------------------------------
+  // The APK is built from the separate Expo project (see docs/mobile-assets);
+  // these are the branded images that project needs.
+  const MIPMAPS = {
+    'mipmap-mdpi': 48,
+    'mipmap-hdpi': 72,
+    'mipmap-xhdpi': 96,
+    'mipmap-xxhdpi': 144,
+    'mipmap-xxxhdpi': 192,
+  };
+  for (const [folder, size] of Object.entries(MIPMAPS)) {
+    await svgTo(
+      iconSvg({ size, markRatio: 0.62, background: BRAND.ink }),
+      path.join(MOBILE, 'android', 'res', folder, 'ic_launcher.png'),
+      { width: size, height: size },
+    );
+  }
+  // adaptive icon: foreground keeps the mark inside Android's 66% safe zone
+  await svgTo(iconSvg({ size: 432, markRatio: 0.72 }), path.join(MOBILE, 'android', 'adaptive-icon-foreground.png'),
+    { width: 432, height: 432 });
+  await svgTo(solidSvg(432, BRAND.ink), path.join(MOBILE, 'android', 'adaptive-icon-background.png'),
+    { width: 432, height: 432 });
+  await svgTo(iconSvg({ size: 512, markRatio: 0.62, background: BRAND.ink }),
+    path.join(MOBILE, 'play-store-icon.png'), { width: 512, height: 512 });
+  await svgTo(iconSvg({ size: 1024, markRatio: 0.62, background: BRAND.ink }),
+    path.join(MOBILE, 'ios', 'AppIcon-1024.png'), { width: 1024, height: 1024 });
+  // android notification icons must be a flat white silhouette
+  await svgTo(markSvg({ left: BRAND.paper, right: BRAND.paper }),
+    path.join(MOBILE, 'notification-icon.png'), { width: 96, height: 96 });
+  for (const [w, h] of [[1284, 2778], [1242, 2436]]) {
+    await svgTo(mobileSplashSvg({ w, h, lockupRatio: 0.5 }), path.join(MOBILE, `splash-${w}x${h}.png`),
+      { width: w, height: h, supersample: 1.2 });
+  }
+
+  // --- Expo app bundle -------------------------------------------------------
+  // Filenames and sizes the Alovoa Expo project expects in its assets/ folder.
+  const EXPO = path.join(MOBILE, 'expo');
+  const WHITE = { left: BRAND.paper, right: BRAND.paper };
+  // full-bleed rose tile with a white mark
+  await svgTo(iconSvg({ size: 1024, markRatio: 0.66, background: BRAND.rose, ...WHITE }),
+    path.join(EXPO, 'icon.png'), { width: 1024, height: 1024 });
+  // android round icon: same badge inside a circle, transparent outside it
+  await svgTo(iconSvg({ size: 1024, markRatio: 0.66, background: BRAND.rose, circle: true, ...WHITE }),
+    path.join(EXPO, 'icon-round.png'), { width: 1024, height: 1024 });
+  // adaptive + themed icons: silhouette only, colour comes from the config
+  await svgTo(iconSvg({ size: 1024, markRatio: 0.72, ...WHITE }),
+    path.join(EXPO, 'adaptive-icon.png'), { width: 1024, height: 1024 });
+  await svgTo(iconSvg({ size: 1024, markRatio: 0.72, ...WHITE }),
+    path.join(EXPO, 'monochrome-icon.png'), { width: 1024, height: 1024 });
+  await svgTo(iconSvg({ size: 48, markRatio: 0.9 }),
+    path.join(EXPO, 'favicon.png'), { width: 48, height: 48 });
+  // Expo paints the splash background colour itself, so these stay transparent.
+  // splash.png is for the light (rose) background, splash-dark.png for the dark one.
+  await svgTo(mobileSplashSvg({ w: 3000, h: 1646, lockupRatio: 0.30, background: null, decor: false, variant: 'mono' }),
+    path.join(EXPO, 'splash.png'), { width: 3000, height: 1646, supersample: 1 });
+  await svgTo(mobileSplashSvg({ w: 3000, h: 1646, lockupRatio: 0.30, background: null, decor: false, variant: 'dark' }),
+    path.join(EXPO, 'splash-dark.png'), { width: 3000, height: 1646, supersample: 1 });
 
   // --- retired Alovoa icon names -------------------------------------------
   for (const legacy of ['alovoa_56.png', 'alovoa_112.png', 'alovoa_128.png']) {

@@ -2,11 +2,11 @@
   <title>BaeLink</title>
   <g transform="translate(0 -9.600000000000001) scale(1)">
       <defs>
-        <clipPath id="baelink-heart-64-0--9.600000000000001">
+        <clipPath id="baelink-heart-2">
           <path d="M32 57C32 57 5 39 5 23C5 14.5 11.5 8 20.5 8C26 8 30 11 32 14.5C34 11 38 8 43.5 8C52.5 8 59 14.5 59 23C59 39 32 57 32 57Z"/>
         </clipPath>
       </defs>
-      <g clip-path="url(#baelink-heart-64-0--9.600000000000001)">
+      <g clip-path="url(#baelink-heart-2)">
         <rect width="64" height="64" fill="#FF3D68"/>
         <path d="M32 2C41 11 23 19 32 30C41 41 23 49 32 62L64 62L64 2Z" fill="#7C5CFF"/>
       </g>

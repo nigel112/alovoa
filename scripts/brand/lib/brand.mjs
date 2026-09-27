@@ -35,7 +35,9 @@ export const BRAND = {
  */
 export const MARK_VIEWBOX = 64;
 
-export function markSvg() {
+let clipSeq = 0;
+
+export function markSvg({ left = BRAND.rose, right = BRAND.violet } = {}) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="${BRAND.name}">
   <defs>
     <clipPath id="baelink-heart">
@@ -43,25 +45,26 @@ export function markSvg() {
     </clipPath>
   </defs>
   <g clip-path="url(#baelink-heart)">
-    <rect width="64" height="64" fill="${BRAND.rose}"/>
-    <path d="M32 2C41 11 23 19 32 30C41 41 23 49 32 62L64 62L64 2Z" fill="${BRAND.violet}"/>
+    <rect width="64" height="64" fill="${left}"/>
+    <path d="M32 2C41 11 23 19 32 30C41 41 23 49 32 62L64 62L64 2Z" fill="${right}"/>
   </g>
 </svg>
 `;
 }
 
 /** The mark alone, as an SVG fragment scaled to `size` and centred in `box`. */
-export function markFragment({ size = 64, x = 0, y = 0 } = {}) {
+export function markFragment({ size = 64, x = 0, y = 0, left = BRAND.rose, right = BRAND.violet } = {}) {
   const s = size / MARK_VIEWBOX;
+  const clipId = `baelink-heart-${++clipSeq}`;
   return `<g transform="translate(${x} ${y}) scale(${s})">
       <defs>
-        <clipPath id="baelink-heart-${size}-${x}-${y}">
+        <clipPath id="${clipId}">
           <path d="M32 57C32 57 5 39 5 23C5 14.5 11.5 8 20.5 8C26 8 30 11 32 14.5C34 11 38 8 43.5 8C52.5 8 59 14.5 59 23C59 39 32 57 32 57Z"/>
         </clipPath>
       </defs>
-      <g clip-path="url(#baelink-heart-${size}-${x}-${y})">
-        <rect width="64" height="64" fill="${BRAND.rose}"/>
-        <path d="M32 2C41 11 23 19 32 30C41 41 23 49 32 62L64 62L64 2Z" fill="${BRAND.violet}"/>
+      <g clip-path="url(#${clipId})">
+        <rect width="64" height="64" fill="${left}"/>
+        <path d="M32 2C41 11 23 19 32 30C41 41 23 49 32 62L64 62L64 2Z" fill="${right}"/>
       </g>
     </g>`;
 }
@@ -216,12 +219,17 @@ export function lockupSvg({ variant = 'light', markSize = 64, gapRatio = 0.30, p
 }
 
 /** The mark centred in a square canvas, optionally on a solid tile. */
-export function iconSvg({ size = 512, markRatio = 0.92, background = null, radius = 0 } = {}) {
+export function iconSvg({
+  size = 512, markRatio = 0.92, background = null, radius = 0,
+  left = BRAND.rose, right = BRAND.violet, circle = false,
+} = {}) {
   const markSize = size * markRatio;
-  const mark = markFragment({ size: markSize, x: (size - markSize) / 2, y: (size - markSize) / 2 });
-  const bg = background
-    ? `<rect width="${size}" height="${size}" rx="${radius}" fill="${background}"/>`
-    : '';
+  const mark = markFragment({
+    size: markSize, x: (size - markSize) / 2, y: (size - markSize) / 2, left, right,
+  });
+  const bg = !background ? '' : circle
+    ? `<circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="${background}"/>`
+    : `<rect width="${size}" height="${size}" rx="${radius}" fill="${background}"/>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="${BRAND.name}">\n  <title>${BRAND.name}</title>\n  ${bg}\n  ${mark}\n</svg>\n`;
 }
 

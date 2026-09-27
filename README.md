@@ -111,9 +111,17 @@ npm run build
 ```
 
 It rebuilds `logo.svg`, the PWA icons, `favicon.ico`, the Open Graph share card,
-the iOS PWA splash and the three screenshots above. Edit
+the iOS PWA splash, the three screenshots above and the
+[mobile app artwork](docs/mobile-assets/README.md) (Android/iOS/Expo icons and
+splash screens). Edit
 [`scripts/brand/lib/brand.mjs`](scripts/brand/lib/brand.mjs) to restyle the
 brand (colours, mark, wordmark, tagline) and everything follows.
+
+The mobile app itself lives in the separate
+[Alovoa/alovoa-expo](https://github.com/Alovoa/alovoa-expo) project; an APK is
+produced there with `eas build -p android --profile preview`, which compiles in
+the cloud. See [docs/mobile-assets](docs/mobile-assets/README.md) for the
+artwork and config changes.
 
 To look at the rebranded landing page without installing a JDK, database or
 mail server, render it as a static page:

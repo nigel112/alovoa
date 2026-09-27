@@ -66,4 +66,38 @@ export function splashSvg() {
   return doc(SPLASH.w, SPLASH.h, parts, `${BRAND.name} splash screen`);
 }
 
+/**
+ * Phone splash screen for the mobile app (Expo). Same composition as the PWA
+ * splash, scaled to the taller phone aspect ratio.
+ */
+export function mobileSplashSvg({
+  w = 1284, h = 2778, lockupRatio = 0.5, background = BRAND.ink, decor = true, tagline = true,
+  variant = 'dark',
+} = {}) {
+  const scale = w / 700;
+  const markSize = lockupMarkSizeForWidth(w * lockupRatio);
+  const lockWidth = lockupContent({ variant, markSize }).width;
+  const parts = [];
+  if (background) parts.push(rect({ x: 0, y: 0, w, h, fill: background }));
+  if (decor) {
+    parts.push(circle({ cx: 600 * scale, cy: 130 * scale, r: 220 * scale, fill: BRAND.rose, opacity: 0.18 }));
+    parts.push(circle({ cx: 90 * scale, cy: 0.92 * h, r: 240 * scale, fill: BRAND.violet, opacity: 0.16 }));
+  }
+  const lockupY = tagline ? 0.375 * h : h / 2 - (markSize * 0.72) / 2;
+  parts.push(lockupContent({ variant, markSize, x: (w - lockWidth) / 2, y: lockupY }).svg);
+  if (tagline) {
+    // on a brand-coloured splash the whole lockup goes white, otherwise the
+    // rose half of the wordmark would sink into the background
+    const mono = variant === 'mono';
+    parts.push(textFragment(BRAND.tagline, {
+      size: 30 * scale, weight: 'semibold', color: BRAND.paper, x: w / 2, y: 0.617 * h, align: 'center',
+    }).svg);
+    parts.push(textFragment(BRAND.tagline2, {
+      size: 20 * scale, weight: 'medium', color: mono ? BRAND.paper : BRAND.rose,
+      opacity: mono ? 0.85 : 1, x: w / 2, y: 0.685 * h, align: 'center',
+    }).svg);
+  }
+  return doc(w, h, parts, `${BRAND.name} splash screen`);
+}
+
 export function num2(n) { return num(n); }

@@ -53,6 +53,11 @@ export function bubble(text, {
   return { width: w, height: h, svg: rect({ x: left, y, w, h, r: 18, fill, opacity }) + label.svg };
 }
 
+/** A plain solid-colour tile (used for adaptive icon backgrounds). */
+export function solidSvg(size, fill = BRAND.ink, radius = 0) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">${rect({ x: 0, y: 0, w: size, h: size, r: radius, fill })}</svg>`;
+}
+
 /** Rounded clip path around a rectangle. */
 export function clipRect(id, { x = 0, y = 0, w, h, r = 0 }) {
   return `<clipPath id="${id}">${rect({ x, y, w, h, r })}</clipPath>`;
