@@ -74,6 +74,28 @@ docker-compose up -d
 docker-compose logs -f
 ```
 
+### Running on Windows with WSL
+
+In an administrator PowerShell (once):
+
+```powershell
+wsl --install -d Debian
+```
+
+Then inside the Debian shell:
+
+```sh
+sudo apt update && sudo apt install -y git
+git clone https://github.com/nigel112/alovoa.git
+cd alovoa
+bash scripts/wsl-setup.sh
+```
+
+`scripts/wsl-setup.sh` installs OpenJDK 17, Maven and MariaDB, creates the
+database, generates a local `src/main/resources/application-dev.properties`
+with encryption keys, builds the jar and serves BaeLink on
+<http://localhost:8080>. Use `--build-only` if you just want it compiled.
+
 ### Debugging
 - Spring Tool Suite / IntelliJ is recommended for debugging
 - Install lombok for your IDE (Not needed for IntelliJ)
